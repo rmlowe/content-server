@@ -21,8 +21,9 @@ public class AuthenticationTokenVerifierServlet extends HttpServlet {
 			String userId = request.getParameter("userId");
 			RelayState relayState = (RelayState) request.getSession()
 					.getAttribute("relayState");
+			String digestAlgorithm = this.getInitParameter("digestAlgorithm");
 			String expected = Hex.encodeHexString(MessageDigest.getInstance(
-					this.getInitParameter("digestAlgorithm")).digest(
+					digestAlgorithm == null ? "MD5" : digestAlgorithm).digest(
 					(userId + this.getInitParameter("key") + relayState.nonce)
 							.getBytes(Charsets.UTF_8)));
 			String actual = request.getParameter("sig");
