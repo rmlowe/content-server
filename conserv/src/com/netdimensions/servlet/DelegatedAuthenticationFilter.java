@@ -12,6 +12,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -30,8 +31,9 @@ public class DelegatedAuthenticationFilter implements Filter {
 			FilterChain chain) throws IOException, ServletException {
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 		HttpSession session = httpRequest.getSession();
-
-		if (session.getAttribute("userId") == null) {
+		final String userId = (String) session.getAttribute("userId");
+		
+		if (userId == null) {
 			String nonce = Hex.encodeHexString(randomBytes());
 			session.setAttribute("relayState", new RelayState(nonce,
 					httpRequest.getRequestURL().toString()));
@@ -51,7 +53,17 @@ public class DelegatedAuthenticationFilter implements Filter {
 							+ "&nonce="
 							+ nonce);
 		} else {
-			chain.doFilter(request, response);
+			chain.doFilter(new HttpServletRequestWrapper(httpRequest) {
+				@Override
+				public String getAuthType() {
+					return "DELEGATED";
+				}
+
+				@Override
+				public String getRemoteUser() {
+					return userId;
+				}
+			}, response);
 		}
 	}
 
