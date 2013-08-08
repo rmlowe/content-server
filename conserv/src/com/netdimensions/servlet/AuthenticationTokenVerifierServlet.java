@@ -19,18 +19,25 @@ public class AuthenticationTokenVerifierServlet extends HttpServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 		try {
 			String userId = request.getParameter("userId");
-			RelayState relayState = (RelayState) request.getSession()
-					.getAttribute("relayState");
 			String digestAlgorithm = this.getInitParameter("digestAlgorithm");
+
+			if (key() == null) {
+				throw new ServletException("Unconfigured key");
+			}
+			
+			if (relayState(request) == null) {
+				throw new ServletException("Unsolicited authentication response");
+			}
+
 			String expected = Hex.encodeHexString(MessageDigest.getInstance(
 					digestAlgorithm == null ? "MD5" : digestAlgorithm).digest(
-					(userId + this.getInitParameter("key") + relayState.nonce)
+					(userId + key() + relayState(request).nonce)
 							.getBytes(Charsets.UTF_8)));
 			String actual = request.getParameter("sig");
 
 			if (expected.equals(actual)) {
 				request.getSession().setAttribute("userId", userId);
-				response.sendRedirect(relayState.target);
+				response.sendRedirect(relayState(request).target);
 			} else {
 				getServletContext().log(
 						"Expected sig " + expected
@@ -40,5 +47,13 @@ public class AuthenticationTokenVerifierServlet extends HttpServlet {
 		} catch (NoSuchAlgorithmException e) {
 			throw new ServletException(e);
 		}
+	}
+
+	private RelayState relayState(HttpServletRequest request) {
+		return (RelayState) request.getSession().getAttribute("relayState");
+	}
+
+	private String key() {
+		return this.getInitParameter("key");
 	}
 }
