@@ -32,8 +32,10 @@ public class AuthenticationTokenVerifierServlet extends HttpServlet {
 				request.getSession().setAttribute("userId", userId);
 				response.sendRedirect(relayState.target);
 			} else {
-				throw new ServletException("Expected sig " + expected
-						+ " did not match actual sig " + actual);
+				getServletContext().log(
+						"Expected sig " + expected
+								+ " did not match actual sig " + actual);
+				throw new ServletException("Signature validation failed");
 			}
 		} catch (NoSuchAlgorithmException e) {
 			throw new ServletException(e);
