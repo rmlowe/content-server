@@ -1,0 +1,29 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.netdimensions</groupId>
+  <artifactId>content-server</artifactId>
+  <packaging>war</packaging>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>NetDimensions Content Server</name>
+  <url>http://www.netdimensions.com</url>
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+    	<groupId>javax.servlet</groupId>
+    	<artifactId>servlet-api</artifactId>
+    	<version>2.5</version>
+    	<scope>provided</scope>
+    </dependency>
+  </dependencies>
+  <build>
+    <finalName>content-server</finalName>
+  </build>
+  <description>Java-based content server implementation designed for use with NetDimensions Talent Suite. Uses OAuth to protect content, and hence does not depend on an external single sign-on mechanism.</description>
+  <inceptionYear>2014</inceptionYear>
+</project>
