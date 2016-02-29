@@ -29,6 +29,9 @@
     <servlet-name>AuthenticationTokenVerifierServlet</servlet-name>
     <url-pattern>/authenticationTokenVerifier</url-pattern>
   </servlet-mapping>
+  <session-config>
+    <session-timeout>90</session-timeout>
+  </session-config>
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>
     <welcome-file>index.htm</welcome-file>

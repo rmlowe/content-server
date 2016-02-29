@@ -1,8 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
               http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
-         version="2.5"
-         xmlns="http://java.sun.com/xml/ns/javaee">
-  <display-name>NetDimensions Content Server</display-name>
+	version="2.5" xmlns="http://java.sun.com/xml/ns/javaee">
+	<display-name>NetDimensions Content Server</display-name>
+	<filter>
+		<filter-name>DelegatedAuthenticationFilter</filter-name>
+		<filter-class>com.netdimensions.servlet.DelegatedAuthenticationFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>DelegatedAuthenticationFilter</filter-name>
+		<url-pattern>/nd/*</url-pattern>
+	</filter-mapping>
+	<servlet>
+		<servlet-name>AuthenticationTokenVerifierServlet</servlet-name>
+		<servlet-class>com.netdimensions.servlet.AuthenticationTokenVerifierServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>FooServlet</servlet-name>
+		<servlet-class>com.netdimensions.servlet.FooServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AuthenticationTokenVerifierServlet</servlet-name>
+		<url-pattern>/authenticationTokenVerifier</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>FooServlet</servlet-name>
+		<url-pattern>/*</url-pattern>
+	</servlet-mapping>
+	<session-config>
+		<session-timeout>90</session-timeout>
+	</session-config>
 </web-app>
